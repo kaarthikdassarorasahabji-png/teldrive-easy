@@ -18,7 +18,11 @@ AppSupportURL={#MyAppURL}/issues
 DefaultDirName={autopf}\TelDrive
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=..\LICENSE
+; Inno Setup only allows ONE license file in the wizard - we ship LICENSE-INSTALLER
+; (Kaarthik's, covering the bits he wrote). The upstream MIT (divyam234) ships in
+; the [Files] section so it lives next to the binary on disk - copyright preserved
+; per the MIT condition.
+LicenseFile=..\LICENSE-INSTALLER
 OutputDir=..\dist
 OutputBaseFilename=TelDriveSetup-{#MyAppVersion}
 Compression=lzma2/ultra64
@@ -43,6 +47,9 @@ Source: "setup-wizard.ps1";   DestDir: "{app}"; Flags: ignoreversion
 Source: "Open-TelDrive.bat";  DestDir: "{app}"; Flags: ignoreversion
 Source: "Stop-TelDrive.bat";  DestDir: "{app}"; Flags: ignoreversion
 Source: "Uninstall-Service.bat"; DestDir: "{app}"; Flags: ignoreversion
+; Both license files ship side-by-side on disk to preserve upstream's MIT notice
+Source: "..\LICENSE";           DestDir: "{app}\licenses"; DestName: "LICENSE-UPSTREAM-divyam234.txt"; Flags: ignoreversion
+Source: "..\LICENSE-INSTALLER"; DestDir: "{app}\licenses"; DestName: "LICENSE-INSTALLER-kaarthik.txt"; Flags: ignoreversion
 
 [Icons]
 Name: "{commondesktop}\Open TelDrive";       Filename: "{app}\Open-TelDrive.bat";  IconFilename: "{app}\{#MyAppExeName}"
