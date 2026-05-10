@@ -1,49 +1,104 @@
-# Teldrive
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tgdrive/teldrive)
+# TelDrive Easy
 
-Teldrive is a powerful utility that enables you to organise your telegram files and much more.
+> A friend-friendly Windows installer for TelDrive — your personal Telegram cloud drive. One double-click and you have unlimited storage backed by your Telegram account.
 
-## Advantages Over Alternative Solutions
+**Made by [Kaarthik Dass Arora](https://github.com/kaarthikdassarorasahabji-png)** — based on [tgdrive/teldrive](https://github.com/tgdrive/teldrive).
 
-- **Exceptional Speed:** Teldrive stands out among similar tools, thanks to its implementation in Go, a language known for its efficiency. Its performance surpasses alternatives written in Python and other languages, with the exception of Rust.
+---
 
-- **Enhanced Management Capabilities:** Teldrive not only excels in speed but also offers an intuitive user interface for efficient file interaction which other tool lacks. Its compatibility with Rclone further enhances file management.
+## Why this exists
 
-> [!IMPORTANT]
-> Teldrive functions as a wrapper over your Telegram account, simplifying file access. However, users must adhere to the limitations imposed by the Telegram API. Teldrive is not responsible for any consequences arising from non-compliance with these API limits.You will be banned instantly if you misuse telegram API.
+Plain TelDrive is powerful but takes ~30 minutes to set up: PostgreSQL, `config.toml`, JWT secrets, Telegram API, scheduled tasks. Most people give up.
 
-Visit https://teldrive-docs.pages.dev for setting up teldrive.
+**TelDrive Easy** wraps all of that into a single `.exe`. You double-click, follow a 3-screen wizard, and you're done. TelDrive runs 24/7 in the background. Your files live in your own Telegram channel.
 
-# Recognitions
+---
 
-<a href="https://trendshift.io/repositories/7568" target="_blank"><img src="https://trendshift.io/api/badge/repositories/7568" alt="divyam234%2Fteldrive | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+## What you get
 
-## Best Practices for Using Teldrive
+- ✅ **Single double-click installer** — no command line, no config files
+- ✅ **24/7 background service** — auto-starts on boot, restarts on crash
+- ✅ **Your storage stays yours** — files go into *your* Telegram channel, not anyone else's
+- ✅ **Web UI at** `http://localhost:8080`
+- 📱 **Android & iOS apps — coming soon. Stay tuned.**
 
-### Dos:
+---
 
-- **Follow Limits:** Adhere to the limits imposed by Telegram servers to avoid account bans and automatic deletion of your channel.Your files will be removed from telegram servers if you try to abuse the service as most people have zero brains they will still do so good luck.
-- **Responsible Storage:** Be mindful of the content you store on Telegram. Utilize storage efficiently and only keep data that serves a purpose.
-  
-### Don'ts:
-- **Data Hoarding:** Avoid excessive data hoarding, as it not only violates Telegram's terms.
-  
-By following these guidelines, you contribute to the responsible and effective use of Telegram, maintaining a fair and equitable environment for all users.
+## Get the installer
 
-## Contributing
+The `.exe` is **not** in this repo (it would contain testing-phase secrets).
 
-Feel free to contribute to this project.See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
+During the friend-testing phase, get it directly from Kaarthik (Telegram / Drive link). After public launch it'll appear under [Releases](https://github.com/kaarthikdassarorasahabji-png/teldrive-easy/releases).
 
-## Donate
+---
 
-If you like this project small contribution would be appreciated [Paypal](https://paypal.me/redux234).
+## Install — 3 steps
 
-## Star History
+1. Download `TelDriveSetup-x.y.z.exe`.
+2. Right-click → **Run as administrator** → click through the wizard.
+3. The wizard will:
+   - Open `https://my.telegram.org` in your browser → you create a free Telegram developer app and paste back two values
+   - Help you create a private Telegram channel
+   - Auto-configure the rest — JWT, encryption keys, 24/7 service, browser launch
 
-<a href="https://www.star-history.com/#tgdrive/teldrive&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=tgdrive/teldrive&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=tgdrive/teldrive&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=tgdrive/teldrive&type=Date" />
- </picture>
-</a>
+When done, your TelDrive opens at `http://localhost:8080`. Log in with your Telegram phone number. **Done.**
+
+---
+
+## What's in this repo?
+
+```
+.
+├── installer/
+│   ├── setup-wizard.ps1        # The PowerShell wizard run on first install
+│   ├── teldrive-setup.iss      # Inno Setup script (compiles to .exe)
+│   ├── build-installer.ps1     # Local-only build script (asks for your DB URL)
+│   ├── Open-TelDrive.bat       # Start menu shortcut helper
+│   ├── Stop-TelDrive.bat
+│   └── Uninstall-Service.bat
+├── UPSTREAM_README.md          # Original TelDrive README (full credit upstream)
+└── ... (TelDrive Go source from upstream fork)
+```
+
+The Go source is the original [tgdrive/teldrive](https://github.com/tgdrive/teldrive) — we add only the `installer/` folder on top.
+
+---
+
+## Build the installer yourself
+
+Requires:
+- Windows 10/11
+- [Inno Setup 6](https://jrsoftware.org/isdl.php)
+- PowerShell 5+
+- A Postgres connection string (free [Supabase](https://supabase.com) tier works)
+
+Then:
+
+```powershell
+cd installer
+powershell -ExecutionPolicy Bypass -File .\build-installer.ps1
+```
+
+You'll be prompted for the Supabase URL once. The output `.exe` lands in `dist/`. **Never commit `dist/` to a public repo** — the `.exe` contains your DB password.
+
+---
+
+## Roadmap
+
+- [x] Windows `.exe` installer (this repo)
+- [ ] **Android app** (Flutter, native MTProto, no shared backend) — *next*
+- [ ] **iOS app** — after Android
+- [ ] Multi-tenant TelDrive 2.0 (each user fully isolated, no whitelist) — long-term
+
+---
+
+## License
+
+MIT (matches upstream).
+
+---
+
+## Credits
+
+- Upstream: [tgdrive/teldrive](https://github.com/tgdrive/teldrive) — the Go server doing all the heavy lifting
+- Installer + branding: **Kaarthik Dass Arora**
