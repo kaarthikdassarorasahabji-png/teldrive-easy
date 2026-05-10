@@ -1,0 +1,36 @@
+name: teldrive_easy
+description: TelDrive Easy mobile client - by Kaarthik Dass Arora
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # HTTP + auth
+  dio: ^5.7.0
+  flutter_secure_storage: ^9.2.2
+  webview_flutter: ^4.10.0
+  webview_cookie_manager: ^2.0.6
+
+  # State + routing
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.6.1
+
+  # UX
+  cached_network_image: ^3.4.1
+  file_picker: ^8.1.4
+  path_provider: ^2.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
